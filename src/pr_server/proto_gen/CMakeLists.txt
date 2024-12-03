@@ -7,10 +7,13 @@ set(PROTO_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_custom_command(
     OUTPUT ${PROTO_SRCS} ${PROTO_HDRS}
-    COMMAND ${PROTOC} --proto_path ${PROTO_DIR} bigdata.proto --cpp_out ${GENERATED_CODE_DIR}
+    COMMAND ${PROTOC} 
+    --proto_path ${PROTO_DIR} bigdata.proto 
+    --cpp_out ${GENERATED_CODE_DIR}
     DEPENDS ${PROTOC} ${PROTO_DIR}/bigdata.proto
     )
 
-include_directories("${protobuf_BINARY_DIR}/google")
+#include_directories("${protobuf_SOURCE_DIR}/src/google/protobuf")
 add_library(bigdata ${PROTO_HDRS} ${PROTO_SRCS})
-target_link_libraries(bigdata PRIVATE "${protobuf_BINARY_DIR}/libprotobuf.a")
+target_include_directories(bigdata PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(bigdata PRIVATE protobuf::libprotobuf)

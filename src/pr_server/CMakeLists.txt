@@ -19,6 +19,7 @@ target_link_system_libraries(
           Boost::asio
           Boost::beast
           Boost::json
+          protobuf::libprotobuf
           )
 
 target_include_directories(pr_server PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")

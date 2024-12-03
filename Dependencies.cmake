@@ -50,11 +50,11 @@ function(myproject_setup_dependencies)
       NAME
       protobuf
       VERSION
-      26.0
+      25.1
       GITHUB_REPOSITORY
       "protocolbuffers/protobuf"
       GIT_TAG
-      "v29.0"
+      "v25.1"
     )
   endif()
 
