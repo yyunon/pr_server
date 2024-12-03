@@ -1,0 +1,6 @@
+syntax = "proto3";
+package bigdata;
+
+message BigData {
+  string value = 1;
+}

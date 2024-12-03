@@ -32,12 +32,30 @@ function(myproject_setup_dependencies)
     cpmaddpackage("gh:CLIUtils/CLI11@2.3.2")
   endif()
 
-  if(NOT TARGET ftxui::screen)
-    cpmaddpackage("gh:ArthurSonzogni/FTXUI@5.0.0")
+  if(NOT TARGET boost::boost)
+    cpmaddpackage(
+      NAME
+      Boost 
+      VERSION
+      1.86.0
+      GITHUB_REPOSITORY
+      "boostorg/boost"
+      GIT_TAG
+      "boost-1.86.0"
+    )
   endif()
 
-  if(NOT TARGET tools::tools)
-    cpmaddpackage("gh:lefticus/tools#update_build_system")
+  if(NOT TARGET protobuf)
+    cpmaddpackage(
+      NAME
+      protobuf
+      VERSION
+      26.0
+      GITHUB_REPOSITORY
+      "protocolbuffers/protobuf"
+      GIT_TAG
+      "v29.0"
+    )
   endif()
 
 endfunction()
