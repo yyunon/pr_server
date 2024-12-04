@@ -1,0 +1,42 @@
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 0.0.0.0 (be patient)
+
+
+Server Software:        YUKSEL
+Server Hostname:        0.0.0.0
+Server Port:            1234
+
+Document Path:          /bigFileJSON
+Document Length:        276 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   40.992 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      33200000 bytes
+HTML transferred:       27600000 bytes
+Requests per second:    2439.53 [#/sec] (mean)
+Time per request:       409.915 [ms] (mean)
+Time per request:       0.410 [ms] (mean, across all concurrent requests)
+Transfer rate:          790.94 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   2.0      0      29
+Processing:    30  407  54.3    404     640
+Waiting:        2  407  54.3    403     640
+Total:         31  408  53.5    404     640
+
+Percentage of the requests served within a certain time (ms)
+  50%    404
+  66%    416
+  75%    432
+  80%    442
+  90%    472
+  95%    495
+  98%    553
+  99%    573
+ 100%    640 (longest request)

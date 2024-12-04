@@ -1,0 +1,42 @@
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 0.0.0.0 (be patient)
+
+
+Server Software:        YUKSEL
+Server Hostname:        0.0.0.0
+Server Port:            1234
+
+Document Path:          /bigFileProto
+Document Length:        180 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   31.688 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      23600000 bytes
+HTML transferred:       18000000 bytes
+Requests per second:    3155.81 [#/sec] (mean)
+Time per request:       316.876 [ms] (mean)
+Time per request:       0.317 [ms] (mean, across all concurrent requests)
+Transfer rate:          727.31 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   2.2      0      31
+Processing:    23  315  49.2    304     513
+Waiting:        1  315  49.2    304     512
+Total:         32  315  48.4    304     513
+
+Percentage of the requests served within a certain time (ms)
+  50%    304
+  66%    314
+  75%    330
+  80%    342
+  90%    392
+  95%    417
+  98%    443
+  99%    453
+ 100%    513 (longest request)
