@@ -23,3 +23,6 @@ target_link_system_libraries(
           )
 
 target_include_directories(pr_server PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
+
+target_compile_options(pr_server PRIVATE -fsanitize=address)
+target_link_options(pr_server PRIVATE -fsanitize=address)

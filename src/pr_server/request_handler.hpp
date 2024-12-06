@@ -1,3 +1,6 @@
+#include <boost/asio.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/buffers_iterator.hpp>
 #include <boost/asio/dispatch.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/core/bind_handler.hpp>
@@ -15,57 +18,63 @@
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <boost/beast/version.hpp>
-#include <boost/asio.hpp>
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/asio/buffers_iterator.hpp>
-#include <cstring>
+#include <cstddef>
 #include <iostream>
+#include <new>
+#include <string>
 
 namespace http::server {
-	namespace beast = boost::beast;
-	namespace http = beast::http;
-	using tcp = boost::asio::ip::tcp;
-  using namespace boost::json;
+namespace beast = boost::beast;
+namespace http = beast::http;
+using tcp = boost::asio::ip::tcp;
+using namespace boost::json;
 
-  struct request_handler {
+namespace request_handler
+{
+  using alloc_t = std::vector<char>::allocator_type;
+  using request_body_t = http::string_body;
+  using request_t = http::request<request_body_t, http::basic_fields<alloc_t>>;
+  auto bad_request(request_t _req, boost::beast::string_view reason)
+  {
+    http::response<http::dynamic_body> result{ http::status::bad_request, _req.version() };
+    result.set(http::field::content_type, "application/json");
+    result.keep_alive(_req.keep_alive());
+    object obj({ { "reason", reason } });
+    auto serialized_obj = serialize(obj);
+    beast::ostream(result.body()) << serialized_obj;
+    result.prepare_payload();
+    return result;
+  }
 
-    http::request<http::dynamic_body> _req;
+  auto internal_server_error(request_t _req, boost::beast::string_view reason)
+  {
+    http::response<http::dynamic_body> result{ http::status::internal_server_error, _req.version() };
+    result.set(http::field::content_type, "application/json");
+    result.keep_alive(_req.keep_alive());
+    object obj({ { "reason", reason } });
+    auto serialized_obj = serialize(obj);
+    beast::ostream(result.body()) << serialized_obj;
+    result.prepare_payload();
+    return result;
+  }
 
-    explicit request_handler(http::request<http::dynamic_body> req): _req(std::move(req)) {}
-
-    auto bad_request(boost::beast::string_view reason) {
-      http::response<http::dynamic_body> result {http::status::bad_request, _req.version()};
-      result.set(http::field::content_type, "application/json");
-      result.keep_alive(_req.keep_alive());
-      object obj ({{"reason", reason}});
-      auto serialized_obj = serialize(obj);
-      beast::ostream(result.body()) << serialized_obj;
-      result.prepare_payload();
-      return result;
-    }
-
-    auto internal_server_error(boost::beast::string_view reason) {
-      http::response<http::dynamic_body> result {http::status::internal_server_error, _req.version()};
-      result.set(http::field::content_type, "application/json");
-      result.keep_alive(_req.keep_alive());
-      object obj ({{"reason", reason}});
-      auto serialized_obj = serialize(obj);
-      beast::ostream(result.body()) << serialized_obj;
-      result.prepare_payload();
-      return result;
-    }
-    
-    value parse_request() {
+  value parse_request(request_t _request)
+  {
+    try {
       beast::error_code ec;
-      auto buf = boost::asio::buffer_cast<char const*>(beast::buffers_front(_req.body().cdata()));
-      value result = parse(beast::string_view(buf), ec);
-      if(ec){
-        std::cerr << "Parsing failed " << ec.what() <<"\n";
-        internal_server_error("Invalid BODY");
+      value result = parse(_request.body(), ec);
+      if (ec) {
+        std::cerr << "Parsing failed " << ec.what() << "\n";
+        return nullptr;
       }
       return result;
+
+    } catch (std::bad_alloc ec) {
+      std::cerr << "Parsing failed " << ec.what() << "\n";
+      return nullptr;
     }
-  };
-}
+  }
+};
+}// namespace http::server
