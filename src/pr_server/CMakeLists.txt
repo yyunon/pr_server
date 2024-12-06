@@ -14,8 +14,6 @@ target_link_libraries(
 target_link_system_libraries(
   pr_server
   PRIVATE
-          fmt::fmt
-          spdlog::spdlog
           Boost::asio
           Boost::beast
           Boost::json
