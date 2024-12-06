@@ -12,6 +12,7 @@ CMakeUserPresets.json
 .vs/
 .idea/
 .vscode/
+out/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
