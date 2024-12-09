@@ -165,10 +165,12 @@ private:
     while (bigFile.read(buffer.get(), buffer_size)) { data += buffer.get(); }
     if (target == "/bigFileJson") {
       object obj({ { "value", data } });
+      _response.set(http::field::content_type, "application/json");
       beast::ostream(_response.body()) << obj;
     } else if (target == "/bigFileProto") {
       bigdata::BigData dat;
       dat.set_value(data);
+      _response.set(http::field::content_type, "application/protobuf");
       auto outbeast = beast::ostream(_response.body());
       dat.SerializeToOstream(&outbeast);
 

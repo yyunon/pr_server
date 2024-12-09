@@ -41,7 +41,7 @@ RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
 RUN update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 100
 RUN update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VER}) 100
 
-ARG LLVM_VER="13"
+ARG LLVM_VER="17"
 # Add clang-${LLVM_VER}
 ARG LLVM_URL="http://apt.llvm.org/${VARIANT}/"
 ARG LLVM_PKG="llvm-toolchain-${VARIANT}-${LLVM_VER}"
@@ -64,7 +64,7 @@ ARG CMAKE_URL="https://apt.kitware.com/ubuntu/"
 ARG CMAKE_PKG=${VARIANT}
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
         | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
-    apt-add-repository -y "deb ${CMAKE_URL} ${CMAKE_PKG} main" && \
+    apt-add-repository -y "deb ${CMAKE_URL} ${CMAKE_PKG} focal main" && \
     apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends cmake cmake-curses-gui
 
@@ -114,7 +114,16 @@ ENV CC=${CC:-"gcc"}
 ENV CXX=${CXX:-"g++"}
 
 # Include project
-#ADD . /workspaces/cpp_starter_project
-#WORKDIR /workspaces/cpp_starter_project
+COPY . /workspaces/pr_server
+WORKDIR /workspaces/pr_server
 
-CMD ["/bin/bash"]
+RUN mkdir build
+WORKDIR /workspaces/pr_server/build
+
+RUN cmake ..
+RUN cmake --build . --parallel 10
+
+EXPOSE 9090
+
+#src/pr_server/pr_server 1.0.0.0 1235 8 
+CMD ["/workspaces/pr_server/build/src/pr_server/pr_server", "127.0.0.1", "9090", "8"]

@@ -31,6 +31,8 @@ function(myproject_setup_dependencies)
       "protocolbuffers/protobuf"
       GIT_TAG
       "v25.1"
+      OPTIONS
+      "protobuf_BUILD_TEST OFF"
     )
   endif()
 

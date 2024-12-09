@@ -1,6 +1,5 @@
 #include <cstdlib>
 #include <memory>
-#include <spdlog/spdlog.h>
 #include <vector>
 
 #include "listener.hpp"
@@ -24,7 +23,7 @@ int main(int argc, char *argv[])
 
     auto const address = net::ip::make_address(argv[1]);
     unsigned short const port = static_cast<unsigned short>(std::atoi(argv[2]));
-    auto const num_threads = std::max<int>(1, static_cast<int>(std::atoi(argv[3])));
+    auto const num_threads = std::max<int>(1, std::atoi(argv[3]));
 
     std::cout << "Running server on " << address << ":" << port << " with " << num_threads << " number of threads...\n";
 
