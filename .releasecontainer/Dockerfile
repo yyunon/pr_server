@@ -117,13 +117,21 @@ ENV CXX=${CXX:-"g++"}
 COPY . /workspaces/pr_server
 WORKDIR /workspaces/pr_server
 
-RUN mkdir build
+RUN mkdir -p build
 WORKDIR /workspaces/pr_server/build
 
 RUN cmake ..
 RUN cmake --build . --parallel 10
 
+RUN mkdir /mount
+
+VOLUME [ "/mount" ]
+
 EXPOSE 9090
 
+ENV ip 127.0.0.1
+ENV port 9090
+ENV threads 8
+
 #src/pr_server/pr_server 1.0.0.0 1235 8 
-CMD ["/workspaces/pr_server/build/src/pr_server/pr_server", "127.0.0.1", "9090", "8"]
+CMD ["/workspaces/pr_server/build/src/pr_server/pr_server", "${ip}", "${port}", "${threads}"]

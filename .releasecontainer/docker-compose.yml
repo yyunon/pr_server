@@ -1,0 +1,17 @@
+services:
+  pr_server:
+    image: pr_server
+    volumes:
+      - appdata:/mount
+    ports:
+      - "9090:9090"
+    restart: always
+    network_mode: host 
+
+volumes:
+  appdata:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mount

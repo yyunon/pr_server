@@ -62,19 +62,13 @@ namespace request_handler
 
   value parse_request(request_t _request)
   {
-    try {
-      beast::error_code ec;
-      value result = parse(_request.body(), ec);
-      if (ec) {
-        std::cerr << "Parsing failed " << ec.what() << "\n";
-        return nullptr;
-      }
-      return result;
-
-    } catch (std::bad_alloc ec) {
+    beast::error_code ec;
+    value result = parse(_request.body(), ec);
+    if (ec) {
       std::cerr << "Parsing failed " << ec.what() << "\n";
       return nullptr;
     }
+    return result;
   }
 };
 }// namespace http::server
